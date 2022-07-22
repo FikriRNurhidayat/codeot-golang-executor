@@ -10,13 +10,16 @@ export GONOPROXY=github.com/fikrirnurhidayat/*
 export GO111MODULE=on
 export GOPRIVATE=github.com/fikrirnurhidayat/*
 
-setup:
+mod:
+	go mod tidy
 	go mod vendor
-	go install
 
-develop:
-	go run main.go
+format:
+	go fmt ./...
 
-build:
-	set -e mkdir out
-	go build -o out/$(shell basename ${PWD}) main.go
+develop: format
+	go run cmd/serve/main.go
+
+build: format
+	set -e mkdir -p target/bin
+	go build -o target/bin/codeot-golang-executor ./cmd/serve/main.go
